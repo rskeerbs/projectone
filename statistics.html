@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang='en-us'>
+
+<head>
+    <meta charset='UTF-8'>
+    <title>Map Page</title>
+    <!-- Compiled and minified CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css"
+        integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script src="./assets/js/chart.js"></script>
+</head>
+
+<body>
+
+
+    <style>
+        .custom-restricted-width {
+            /* To limit the menu width to the content of the menu: */
+            display: inline-block;
+            /* Or set the width explicitly: */
+            /* width: 10em; */
+        }
+    </style>
+
+    <div class="pure-menu custom-restricted-width myMenu">
+        <span class="pure-menu-heading">COVID-19 Tracker Homepage</span>
+
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item"><a href="./index.html" class="pure-menu-link">Home</a></li>
+            <li class="pure-menu-item"><a href="./statistics.html" class="pure-menu-link">Statistics</a></li>
+            <li class="pure-menu-item"><a href="./map.html" class="pure-menu-link">Map</a></li>
+            <li class="pure-menu-item"><a href="./contact.html" class="pure-menu-link">Contact</a></li>
+        </ul>
+    </div>
+
+
+    <div id="main">
+
+        <div class="header">
+            <h1>Tracker</h1>
+            <h2>Our Page info here</h2>
+        </div>
+
+        <div class="content">
+
+            <div class="pure-g">
+
+                <div class="pure-u-1-12"></div>
+
+                <div class="pure-u-5-12">
+
+                    <h2 class="content-subhead">Main title</h2>
+                    <p>Lorem ipsum dolor sit amet tempor incididunt ut laboreet dolore magna aliqua. </p><br>
+
+                    <form class="pure-form">
+                        <input type="text" class="pure-input-rounded myInputCountry">
+                        <button type="submit" class="pure-button mySearchBtn2">Search</button><br>
+                    </form><br>
+
+                </div>
+
+                <div class="pure-u-1-12"></div>
+            </div>
+
+            <div class="pure-g">
+
+                <div class="pure-u-1-12">
+                    
+                </div>
+                <div class="pure-u-5-12">
+                    <h2 class="content-subhead">Coronavirus Disease (COVID-19) Information:</h2>
+                </div>
+                <div class="pure-u-1-12">
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <div class="pure-g">
+            <div class="pure-u-1-12"></div>
+
+
+            <div class="pure-u-5-12 dataContainer">
+                <table class="pure-table myDataTable">
+
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>New Cases</th>
+                            <th>Active</th>
+                            <th>Critical</th>
+                            <th>Recovered</th>
+                            <th>Total</th>
+                            <th>New Deaths</th>
+                            <th>Total Deaths</th>
+                
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+                </table><br>
+            </div>
+
+            <div class="pure-u-1-12"></div>
+
+        </div>
+
+        <div class="pure-u-1-12"></div>
+
+        <div class="pure-u-5-12 dataContainer">
+            <table class="pure-table myChart1">
+                <div class=myChart1>
+                    <canvas id='myChart'>
+                        <p>testData</p>
+                    </canvas>
+                </div><br>
+        </div>
+
+        <div class="pure-u-1-12"></div>
+
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+        let myChart = document.getElementById('myChart').getContext('2d');
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+body{
+    
+}
+
+#container-for-content {
+    width: 85%;
+    max-width: 85%;
+    margin: 0 auto;
+}
+
+.header{
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 1em;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+    letter-spacing: 0.05em;
+};
+h1{
+    display: block;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-size: 320%;
+};
+
+.l-box{
+    padding: 1em;
+    padding-top: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
+    padding-left: 1em;
+};
+#box{
+    padding: 1em;
+    padding-top: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
+    padding-left: 1em;
+};
+p{
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+};
+.covid-19Image{
+    margin: 0 auto;
+    padding: 1em;
+};
+.myMenu{
+    background-color: aqua;
+}
+
+.dataContainer{
+    background-color: #F4F4F4;
+}

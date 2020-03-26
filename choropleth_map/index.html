@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Map COVID-19</title>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="http://d3js.org/topojson.v0.min.js"></script>
+  <script src="https://d3js.org/d3-color.v1.min.js"></script>
+  <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+
+  <style type="text/css">
+
+
+  </style>
+</head>
+
+<body>
+  <script type="text/javascript">
+    var states = [];
+    var country = "USA";
+
+
+
+    $(document).ready(function () { // DocRdy start
+
+      var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": `https://covid-19-coronavirus-statistics.p.rapidapi.com/v1/stats?country=${country}`,
+        "method": "GET",
+        "headers": {
+          "x-rapidapi-host": "covid-19-coronavirus-statistics.p.rapidapi.com",
+          "x-rapidapi-key": "75dc33b5ddmshffa568272725104p100b3fjsn243554d73b59"
+        }
+      };
+
+      function getResults() { //get results func starts
+
+        $("myDataTable").empty();
+        settings.url = `https://covid-19-coronavirus-statistics.p.rapidapi.com/v1/stats?country=${country}`;
+
+        $.ajax(settings).done(function (response) {
+          //console.log(response);
+          let results = response;
+          //console.log(results);
+
+          let province = results.data.covid19Stats;
+          // console.log(province);
+          // states.empty();
+
+          for (let i = 0; i < province.length; i++) {
+
+            let state = province[i].province;
+            let number = i + 1;
+            let confirmed = province[i].confirmed;
+            let deaths = province[i].deaths;
+            let recovered = province[i].recovered;
+
+            let obj = {
+              state: state,
+              intensity: confirmed,
+              deaths: deaths,
+              recovered: recovered
+            }
+            states.push(obj);
+            $(".myDataTable tbody").empty();
+
+            $('.myDataTable').append('<tr><td>' + number + '</td> <td>' + state + '</td> <td>' + confirmed + '</td><td>' + deaths + '</td>  <td>' + recovered + '</td>  </tr>');
+          }
+
+          console.log(states);
+          mapStates();
+        });
+      }
+
+      getResults();
+
+
+
+      $('.mySearchBtn').click(function (e) {
+
+        e.preventDefault();
+
+        $(".myDataTable tbody").empty()
+
+
+        //alert("Handler for .click() called.");
+
+        country = $('.myInputCountry').val();
+        console.log(country);
+        //get results func end
+        getResults();
+
+        for (let i = 0; i < states.length; i++) {
+          console.log(states[i]);
+          $('.myDataTable').append('<tr><td>' + number + '</td> <td>' + state + '</td> <td>' + confirmed + '</td><td>' + deaths + '</td>  <td>' + recovered + '</td>  </tr>');
+        }
+
+      });
+
+      //Map code begins here
+      function mapStates() {
+        //Width and height
+        var w = 500;
+        var h = 300;
+
+        var margin = {
+          top: 60,
+          bottom: 40,
+          left: 70,
+          right: 40
+        };
+
+        var width = w - margin.left - margin.right;
+        var height = h - margin.top - margin.bottom;
+
+
+        // define map projection
+        var projection = d3.geoAlbersUsa()
+          .translate([w / 2, h / 2])
+          .scale([500]);
+
+        //Define default path generator
+        var path = d3.geoPath()
+          .projection(projection);
+
+        var svg = d3.select("body")
+          .append("svg")
+          .attr("id", "chart")
+          .attr("width", w)
+          .attr("height", h)
+          .append("g")
+          .attr("tranform", "translate(0" + margin.left + "," + margin.top + ")");
+
+        console.log(d3.schemeOranges);
+        var color = d3.scaleQuantile()
+        //.range(d3.interpolateInferno(9))
+        .range(d3.schemeOranges[9]);
+        //.range(["rgb(255, 245, 235)", "rgb(254, 230, 206)", "rgb(253,208,162)", "rgb(253,174,107)", "rgb(253,141,60)", "rgb(241,105,19)", "rgb(217,72,1)", "rgb(166,54,3)", "rgb(127,39,4)"]);
+        console.log(color);
+
+        color.domain([d3.min(states, function (d) { return d.intensity; }),
+        d3.max(states, function (d) { return d.intensity; })
+        ]);
+
+        d3.json("us-states.json", function (json) {
+          //Merge the agriculture and GeoJSON data
+          //Loop through once for each agriculture data value
+          for (var i = 0; i < states.length; i++) {
+            // grab state name
+            var dataState = states[i].state;
+
+            //grab data value, and convert from string to float
+            var dataValue = parseFloat(states[i].intensity);
+
+            //find the corresponding state inside the GeoJSON
+            console.log(json.features.length);
+            for (var n = 0; n < json.features.length; n++) {
+
+              // properties name gets the states name
+              var jsonState = json.features[n].properties.name;
+              // if statment to merge by name of state
+              if (dataState === jsonState) {
+                //Copy the data value into the JSON
+                // basically creating a new value column in JSON data
+                json.features[n].properties.value = dataValue;
+
+                //stop looking through the JSON
+                break;
+              }
+            }
+          }
+
+          console.log(json.features);
+
+          svg.selectAll("path")
+            .data(json.features)
+            .enter()
+            .append("path")
+            .attr("d", path)
+            .style("fill", function (d) {
+              //get the data value
+              var value = d.properties.value;
+
+              if(value){
+              //If value exists
+              console.log(color(value));
+              return color(value);
+            } else {
+              // If value is undefined
+              //we do this because alaska and hawaii are not in dataset we are using but still in projections
+              return "#ccc"
+            }
+
+          function setColor(){
+           if (value < 100){
+            return "#fff5eb"
+          }
+          else if(value >=  100 && <= 500){
+             return "#fdd0a2"
+          }
+          else if(value => 501 && <= 1000){
+            return "#fd8d3c"
+           }
+           else if(value => 1001 && <= 2000){
+            return "#d94801"
+           }
+           else if(value => 2001 && <= 5000){
+            return "#7f2704"
+           }else if{
+              // If value is undefined
+              //we do this because alaska and hawaii are not in dataset we are using but still in projections
+              return "#ccc"
+            }
+         };
+
+            });
+
+
+        });
+      }
+    });
+
+
+
+  </script>
+</body>
+
+</html>
